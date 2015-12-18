@@ -83,4 +83,4 @@ with open(InputFileName, 'r') as InputFile:
                     if len(seglist)!=9:
                         seglist.insert(10,seglist[9]*100.0/total)
                         outputfile.write(trim(str(seglist)))
-print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
+print('Ends at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
