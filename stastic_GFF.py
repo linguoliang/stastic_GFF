@@ -1,6 +1,6 @@
 __author__ = 'Guoliang Lin'
 Softwarename = 'splitGFF'
-version = '1.0.1'
+version = '2.0.1'
 bugfixs = ''
 import sys, getopt
 import time
@@ -41,46 +41,88 @@ def repos(poslist):
     else:
         return poslist[1]
 
+def f(a):
+    if len(a)==9:
+        return int(a[3])
+    else:
+        return int(repos(a[0:2]))
+
+
 print('%s software version is %s' % (Softwarename, version))
 print(bugfixs)
 print('starts at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
 SegmentDict={}
-
-opts, args = getopt.getopt(sys.argv[1:], 'i:s:t:h', ['inputfile=','snp=','total=','help'])
+TypeDict={}
+Totalname=0
+writeitem=[]
+end=0
+opts, args = getopt.getopt(sys.argv[1:], 'i:s:t:n:h', ['inputfile=','snp=','total=','name=','help'])
 InputFileName = ''
+oname=''
 for o, a in opts:
     if o in ['-i', '--inputfile']:
         InputFileName = a
     elif o in ['-s','--snp']:
-        snp=a
+        snpfile=a
     elif o in ['-t','--total']:
         total=int(a)
+    elif o in ['-n','--name']:
+        oname=a
     elif o in ['-h', '--help']:
         help = True
 with open(InputFileName, 'r') as InputFile:
-    with open(snp,'r') as snp:
-        with open(InputFileName+'.out','w') as outputfile:
-            for element in InputFile:
-                itemlist=element.split()
-                if itemlist[0] in SegmentDict.keys():
-                    SegmentDict[itemlist[0]].append(itemlist)
-                else:
-                    SegmentDict[itemlist[0]]=[itemlist]
-            for element in snp:
-                itemlist=element.split()
-                if itemlist[0] in SegmentDict.keys():
-                    for x in range(0,len(SegmentDict[itemlist[0]])):
-                        if iscontains(repos(itemlist[1:3]),SegmentDict[itemlist[0]][x][3:5]):
-                            if len(SegmentDict[itemlist[0]][x])==9:
-                                SegmentDict[itemlist[0]][x].append(1)
-                                SegmentDict[itemlist[0]][x].append(itemlist[-1])
+    with open(snpfile,'r') as snp:
+        with open(oname,'w') as outputfile:
+            with open(oname+'_stastic','w') as typefile:
+                InputFile.readline()
+                for element in InputFile:
+                    itemlist=element.split()
+                    if SegmentDict.has_key(itemlist[0]):
+                        SegmentDict[itemlist[0]].append(itemlist[1:])
+                    else:
+                        SegmentDict[itemlist[0]]=[itemlist[1:]]
+                for element in snp:
+                    itemlist=element.split()
+                    if SegmentDict.has_key(itemlist[0]):
+                        SegmentDict[itemlist[0]].append(itemlist)
+                for keys in SegmentDict.keys():
+                    SegmentDict[keys].sort(key=f)
+                    typelist=''
+                    number=0
+                    end=0
+                    writeitem=[]
+                    for snplist in SegmentDict[keys]:
+                        if len(snplist)==9:
+                            if len(writeitem)!=0:
+                                #print str(number)
+                                writeitem.append(str(number))
+                                writeitem.append(str(number*100/total))
+                                writeitem.append(typelist)
+                                if number!=0:
+                                    outputfile.write(trim(str(writeitem)))
+                            end=int(snplist[4])
+                            #print end
+                            writeitem=snplist
+                            typelist=''
+                            number=0
+                        elif int(repos(snplist[0:2]))<end:
+                            if TypeDict.has_key(snplist[-1]):
+                                TypeDict[snplist[-1]]=1
                             else:
-                                SegmentDict[itemlist[0]][x][-2]=SegmentDict[itemlist[0]][x][-2]+1
-                                SegmentDict[itemlist[0]][x][-1]=SegmentDict[itemlist[0]][x][-1]+';'+itemlist[-1]
-                            break;
-            for scafford in SegmentDict.keys():
-                for seglist in SegmentDict[scafford]:
-                    if len(seglist)!=9:
-                        seglist.insert(10,seglist[9]*100.0/total)
-                        outputfile.write(trim(str(seglist)))
+                                TypeDict[snplist[-1]]+=1
+                            Totalname+=1
+                            number=number+1
+                            if typelist.find(snplist[-1])==-1:
+                                typelist=typelist+','+snplist[-1]
+                    for key in TypeDict.keys():
+                        typefile.write(key+'\t'+TypeDict[key]+'\t'+100.0*TypeDict[key]/Totalname+'\n')
+                    #     for x in range(0,len(SegmentDict[itemlist[0]])):
+                    #         if iscontains(repos(itemlist[1:3]),SegmentDict[itemlist[0]][x][3:5]):
+                    #             if len(SegmentDict[itemlist[0]][x])==9:
+                    #                 SegmentDict[itemlist[0]][x].append(1)
+                    #                 SegmentDict[itemlist[0]][x].append(itemlist[-1])
+                    #             else:
+                    #                 SegmentDict[itemlist[0]][x][-2]=SegmentDict[itemlist[0]][x][-2]+1
+                    #                 SegmentDict[itemlist[0]][x][-1]=SegmentDict[itemlist[0]][x][-1]+';'+itemlist[-1]
+                    #             break
 print('Ends at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
