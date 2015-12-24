@@ -107,9 +107,9 @@ with open(InputFileName, 'r') as InputFile:
                             number=0
                         elif int(repos(snplist[0:2]))<end:
                             if TypeDict.has_key(snplist[-1]):
-                                TypeDict[snplist[-1]]=1
-                            else:
                                 TypeDict[snplist[-1]]+=1
+                            else:
+                                TypeDict[snplist[-1]]=1
                             Totalname+=1
                             number=number+1
                             if typelist.find(snplist[-1])==-1:
