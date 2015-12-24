@@ -1,6 +1,6 @@
 __author__ = 'Guoliang Lin'
 Softwarename = 'splitGFF'
-version = '2.0.1'
+version = '2.0.2'
 bugfixs = ''
 import sys, getopt
 import time
