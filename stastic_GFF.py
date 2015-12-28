@@ -1,6 +1,6 @@
 __author__ = 'Guoliang Lin'
-Softwarename = 'splitGFF'
-version = '2.0.4'
+Softwarename = 'stasticGFF'
+version = '2.0.6'
 bugfixs = 'fixs discarding the last of segemt of each scaffold'
 import sys, getopt
 import time
@@ -119,8 +119,8 @@ with open(InputFileName, 'r') as InputFile:
                         writeitem.append(str(number*100/total))
                         writeitem.append(typelist)
                         outputfile.write(trim(str(writeitem)))
-                    for key in TypeDict.keys():
-                        typefile.write(key+'\t'+str(TypeDict[key])+'\t'+str(100.0*TypeDict[key]/Totalname)+'\n')
+                for key in TypeDict.keys():
+                    typefile.write(key+'\t'+str(TypeDict[key])+'\t'+str(100.0*TypeDict[key]/Totalname)+'\n')
                     #     for x in range(0,len(SegmentDict[itemlist[0]])):
                     #         if iscontains(repos(itemlist[1:3]),SegmentDict[itemlist[0]][x][3:5]):
                     #             if len(SegmentDict[itemlist[0]][x])==9:
