@@ -1,7 +1,7 @@
 __author__ = 'Guoliang Lin'
 Softwarename = 'splitGFF'
-version = '2.0.2'
-bugfixs = ''
+version = '2.0.4'
+bugfixs = 'fixs discarding the last of segemt of each scaffold'
 import sys, getopt
 import time
 def trim(y):
@@ -114,6 +114,11 @@ with open(InputFileName, 'r') as InputFile:
                             number=number+1
                             if typelist.find(snplist[-1])==-1:
                                 typelist=typelist+','+snplist[-1]
+                    if number>0:
+                        writeitem.append(str(number))
+                        writeitem.append(str(number*100/total))
+                        writeitem.append(typelist)
+                        outputfile.write(trim(str(writeitem)))
                     for key in TypeDict.keys():
                         typefile.write(key+'\t'+TypeDict[key]+'\t'+100.0*TypeDict[key]/Totalname+'\n')
                     #     for x in range(0,len(SegmentDict[itemlist[0]])):
