@@ -120,7 +120,7 @@ with open(InputFileName, 'r') as InputFile:
                         writeitem.append(typelist)
                         outputfile.write(trim(str(writeitem)))
                     for key in TypeDict.keys():
-                        typefile.write(key+'\t'+TypeDict[key]+'\t'+100.0*TypeDict[key]/Totalname+'\n')
+                        typefile.write(key+'\t'+str(TypeDict[key])+'\t'+str(100.0*TypeDict[key]/Totalname)+'\n')
                     #     for x in range(0,len(SegmentDict[itemlist[0]])):
                     #         if iscontains(repos(itemlist[1:3]),SegmentDict[itemlist[0]][x][3:5]):
                     #             if len(SegmentDict[itemlist[0]][x])==9:
