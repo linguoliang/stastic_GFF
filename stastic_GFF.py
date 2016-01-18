@@ -75,16 +75,16 @@ with open(InputFileName, 'r') as InputFile:
         with open(oname,'w') as outputfile:
             with open(oname+'_stastic','w') as typefile:
                 InputFile.readline()
-                for element in InputFile:
-                    itemlist=element.split()
-                    if SegmentDict.has_key(itemlist[0]):
-                        SegmentDict[itemlist[0]].append(itemlist[1:])
-                    else:
-                        SegmentDict[itemlist[0]]=[itemlist[1:]]
                 for element in snp:
                     itemlist=element.split()
                     if SegmentDict.has_key(itemlist[0]):
                         SegmentDict[itemlist[0]].append(itemlist)
+                    else:
+                        SegmentDict[itemlist[0]]=[itemlist]
+                for element in InputFile:
+                    itemlist=element.split()
+                    if SegmentDict.has_key(itemlist[0]):
+                        SegmentDict[itemlist[0]].append(itemlist[1:])
                 for keys in SegmentDict.keys():
                     SegmentDict[keys].sort(key=f)
                     typelist=''
@@ -105,7 +105,7 @@ with open(InputFileName, 'r') as InputFile:
                             writeitem=snplist
                             typelist=''
                             number=0
-                        elif int(repos(snplist[0:2]))<end:
+                        elif int(repos(snplist[0:2])) <= end:
                             if TypeDict.has_key(snplist[-1]):
                                 TypeDict[snplist[-1]]+=1
                             else:
@@ -120,5 +120,14 @@ with open(InputFileName, 'r') as InputFile:
                         writeitem.append(typelist)
                         outputfile.write(trim(str(writeitem)))
                 for key in TypeDict.keys():
-                    typefile.write(key+'\t'+str(TypeDict[key])+'\t'+str(Totalname)+'\t'+str(100.0*TypeDict[key]/Totalname)+'\n')
+                    typefile.write(key+'\t'+str(TypeDict[key])+'\t'+str(100.0*TypeDict[key]/Totalname)+'\n')
+                    #     for x in range(0,len(SegmentDict[itemlist[0]])):
+                    #         if iscontains(repos(itemlist[1:3]),SegmentDict[itemlist[0]][x][3:5]):
+                    #             if len(SegmentDict[itemlist[0]][x])==9:
+                    #                 SegmentDict[itemlist[0]][x].append(1)
+                    #                 SegmentDict[itemlist[0]][x].append(itemlist[-1])
+                    #             else:
+                    #                 SegmentDict[itemlist[0]][x][-2]=SegmentDict[itemlist[0]][x][-2]+1
+                    #                 SegmentDict[itemlist[0]][x][-1]=SegmentDict[itemlist[0]][x][-1]+';'+itemlist[-1]
+                    #             break
 print('Ends at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
