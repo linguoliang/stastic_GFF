@@ -121,13 +121,4 @@ with open(InputFileName, 'r') as InputFile:
                         outputfile.write(trim(str(writeitem)))
                 for key in TypeDict.keys():
                     typefile.write(key+'\t'+str(TypeDict[key])+'\t'+str(Totalname)+'\t'+str(100.0*TypeDict[key]/Totalname)+'\n')
-                    #     for x in range(0,len(SegmentDict[itemlist[0]])):
-                    #         if iscontains(repos(itemlist[1:3]),SegmentDict[itemlist[0]][x][3:5]):
-                    #             if len(SegmentDict[itemlist[0]][x])==9:
-                    #                 SegmentDict[itemlist[0]][x].append(1)
-                    #                 SegmentDict[itemlist[0]][x].append(itemlist[-1])
-                    #             else:
-                    #                 SegmentDict[itemlist[0]][x][-2]=SegmentDict[itemlist[0]][x][-2]+1
-                    #                 SegmentDict[itemlist[0]][x][-1]=SegmentDict[itemlist[0]][x][-1]+';'+itemlist[-1]
-                    #             break
 print('Ends at :' + time.strftime('%Y-%m-%d %H:%M:%S'))
